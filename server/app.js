@@ -1,8 +1,8 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import admin from "firebase-admin";
-import serviceAccount from "./internship-flow-firebase-adminsdk-9j1de-04bf2c7330.json" assert { type: "json" };
 
+import internshipRoute from "./routes/internship.js";
 
 dotenv.config();
 const app = express();
@@ -16,13 +16,6 @@ app.use((req, res, next) => {
     );
     next();
 });
-// Initialize Firebase
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
-
-const db = admin.firestore();
-
 //read from firestore
 // let internshipRef = db.collection('Internships');
 // internshipRef.get().then(snapshot => {
@@ -41,6 +34,7 @@ const db = admin.firestore();
 
 // db.collection('Internships').doc(data.id.toString()).set(data);
 
+app.use("/api/internships", internshipRoute);
 
 app.listen(process.env.PORT || 8000, () => {
     console.log(`Server running on port ${process.env.PORT || 8000}`);
